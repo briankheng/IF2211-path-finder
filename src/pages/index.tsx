@@ -6,9 +6,9 @@ export default function Home() {
   const [fileData, setFileData] = useState(null);
   return (
     <>
-      <div className="flex">
+      <div className="md:flex">
         <Map fileData={fileData}/>
-        <SideBar setFileData={setFileData}/>
+        <SideBar fileData={fileData} setFileData={setFileData}/>
       </div>
     </>
   );
