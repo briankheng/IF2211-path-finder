@@ -11,26 +11,47 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 44,
-  lng: -80,
+  lat: -6.891213825491306,
+  lng: 107.61065741605813,
 };
 
-const path = [
-  { lat: 44, lng: -80 },
-  { lat: 43, lng: -81 },
-];
-
-function Map() {
+function Map({ fileData }: { fileData: any }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
 
   return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-      <MarkerF position={path[0]} label={"A"} />
-      <MarkerF position={path[1]} label={"B"} />
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={
+        fileData
+          ? { lat: fileData.nodes[0].lat, lng: fileData.nodes[0].lng }
+          : center
+      }
+      zoom={15}
+    >
+      {fileData &&
+        fileData.nodes.map((node: any) => (
+          <MarkerF
+            key={node.id}
+            label={node.name}
+            position={{
+              lat: node.lat,
+              lng: node.lng,
+            }}
+          />
+        ))}
 
-      <PolylineF path={[path[0], path[1]]} />
+      {fileData &&
+        fileData.paths.map((path: any) => (
+          <PolylineF
+            key={path.id}
+            path={[
+              { lat: path.lat_start, lng: path.lng_start },
+              { lat: path.lat_end, lng: path.lng_end },
+            ]}
+          />
+        ))}
     </GoogleMap>
   ) : (
     <h1>Loading...</h1>
