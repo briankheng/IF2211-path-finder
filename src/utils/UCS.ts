@@ -1,13 +1,46 @@
-function UCS(start: any, end: any, num_nodes: any, adj_list: any) {
-  //   Example:
-  //   const shortestPath = [
-  //     { id: 1 ,lat_start: -6.893030460842018, lng_start: 107.61850705056274, lat_end: -6.885227954733648, lng_end: 107.6141709133203 },
-  //     { id: 2, lat_start: -6.885227954733648, lng_start: 107.6141709133203, lat_end: -6.884814025032117, lng_end: 107.61110643158801 },
-  //   ];
-  //   const shortestDistance = 100;
+import haversine from "./haversine";
 
-  const shortestPath = [{}];
-  const shortestDistance = 0;
+function UCS(start: any, end: any, num_nodes: any, nodes: any, adj_list: any) {
+  const shortestPath = [];
+  let shortestDistance: number = 0;
+  const visited: boolean[] = Array.from({ length: num_nodes }, () => false);
+  const distance: number[] = Array.from({ length: num_nodes }, () => Infinity);
+  const parent: number[] = Array.from({ length: num_nodes }, () => -1);
+  const priorityQueue: [number, number][] = [];
+
+  distance[start] = 0;
+  priorityQueue.push([start, 0]);
+
+  while (priorityQueue.length > 0) {
+    priorityQueue.sort((a, b) => a[1] - b[1]);
+    const [idx, _] = priorityQueue.shift()!;
+    if (visited[idx]) continue;
+    visited[idx] = true;
+
+    for (const it of adj_list[idx]) {
+      const newDistance = distance[idx] + haversine(nodes[idx], nodes[it]);
+      if (newDistance < distance[it]) {
+        distance[it] = newDistance;
+        parent[it] = idx;
+        priorityQueue.push([it, newDistance]);
+      }
+    }
+  }
+
+  let idx = end;
+  while (idx != start) {
+    shortestPath.push({
+      id: shortestPath.length,
+      lat_start: nodes[parent[idx]].lat,
+      lng_start: nodes[parent[idx]].lng,
+      lat_end: nodes[idx].lat,
+      lng_end: nodes[idx].lng,
+    });
+    shortestDistance += haversine(nodes[parent[idx]], nodes[idx]);
+    idx = parent[idx];
+  }
+
+  shortestDistance = Math.round(shortestDistance * 1000) / 1000000;
 
   return { shortestPath, shortestDistance };
 }

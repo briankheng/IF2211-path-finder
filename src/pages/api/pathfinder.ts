@@ -18,9 +18,9 @@ export default async function handler(
 
     // Return the shortest path and the total distance
     if (method === "A*") {
-      result = AStar(start, end, num_nodes, adj_list);
+      result = AStar(start, end, num_nodes, nodes, adj_list);
     } else if (method === "UCS") {
-      result = UCS(start, end, num_nodes, adj_list);
+      result = UCS(start, end, num_nodes, nodes, adj_list);
     }
 
     return res.status(200).json({
