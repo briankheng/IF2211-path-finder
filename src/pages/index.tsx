@@ -4,11 +4,13 @@ import { useState } from "react";
 
 export default function Home() {
   const [fileData, setFileData] = useState(null);
+  const [shortestPath, setShortestPath] = useState(null);
+  
   return (
     <>
       <div className="md:flex">
-        <Map fileData={fileData}/>
-        <SideBar fileData={fileData} setFileData={setFileData}/>
+        <Map fileData={fileData} shortestPath={shortestPath}/>
+        <SideBar fileData={fileData} setFileData={setFileData} setShortestPath={setShortestPath}/>
       </div>
     </>
   );

@@ -15,7 +15,7 @@ const center = {
   lng: 107.61065741605813,
 };
 
-function Map({ fileData }: { fileData: any }) {
+function Map({ fileData, shortestPath }: { fileData: any, shortestPath: any }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
@@ -50,6 +50,27 @@ function Map({ fileData }: { fileData: any }) {
               { lat: path.lat_start, lng: path.lng_start },
               { lat: path.lat_end, lng: path.lng_end },
             ]}
+            options={{
+              strokeColor: "black",
+              strokeOpacity: 0.6,
+              strokeWeight: 3,
+            }}
+          />
+        ))}
+
+      {shortestPath &&
+        shortestPath.map((path: any) => (
+          <PolylineF
+            key={path.id}
+            path={[
+              { lat: path.lat_start, lng: path.lng_start },
+              { lat: path.lat_end, lng: path.lng_end },
+            ]}
+            options={{
+              strokeColor: "red",
+              strokeOpacity: 1,
+              strokeWeight: 6,
+            }}
           />
         ))}
     </GoogleMap>

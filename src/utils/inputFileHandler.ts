@@ -1,6 +1,6 @@
 import parseData from "./parseData";
 
-function inputFileHandler(event: any, setFileData: any) {
+function inputFileHandler(event: any, setFileData: any, setShortestPath: any) {
   // TODO:Handle error
   if (
     event.target.files[0] === null ||
@@ -10,6 +10,7 @@ function inputFileHandler(event: any, setFileData: any) {
   ) {
     return;
   }
+  setShortestPath(null);
 
   const file = event.target.files[0];
   const reader = new FileReader();
