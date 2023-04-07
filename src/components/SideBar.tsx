@@ -51,7 +51,7 @@ function SideBar({
   };
 
   return (
-    <div className="flex flex-col text-center md:w-[30vw] bg-zinc-900 text-white">
+    <div className="flex flex-col text-center md:w-[35vw] bg-zinc-900 text-white overflow-y-scroll">
       <h1 className="bg-red-600 px-3 py-3 text-lg font-bold ">PATHFINDER</h1>
 
       <div className="flex flex-col items-center mt-5">

@@ -8,7 +8,7 @@ export default function Home() {
   
   return (
     <>
-      <div className="md:flex">
+      <div className="md:flex h-screen w-screen">
         <Map fileData={fileData} shortestPath={shortestPath}/>
         <SideBar fileData={fileData} setFileData={setFileData} setShortestPath={setShortestPath}/>
       </div>
