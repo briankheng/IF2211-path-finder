@@ -52,11 +52,11 @@ function SideBar({
 
   return (
     <div className="flex flex-col gap-4 text-center bg-zinc-900 text-white">
-      <h1 className="bg-red-600 p-3 text-lg font-bold sticky top-0 z-50">
+      <h1 className="bg-red-600 p-3 text-lg font-bold sticky top-0 z-50 hidden md:block">
         PATHFINDER
       </h1>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center mt-4 md:mt-0">
         <h2>1. Upload File Configuration</h2>
         <div className="w-[90%] mt-3">
           <input
