@@ -6,8 +6,8 @@ import {
 } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: "100vw",
-  height: "100vh",
+  width: "100%",
+  height: "100%",
 };
 
 const center = {

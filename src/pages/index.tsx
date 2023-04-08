@@ -9,8 +9,12 @@ export default function Home() {
   return (
     <>
       <div className="md:flex h-screen w-screen">
-        <Map fileData={fileData} shortestPath={shortestPath}/>
-        <SideBar fileData={fileData} setFileData={setFileData} setShortestPath={setShortestPath}/>
+        <div className="h-[50vh] md:w-[70vw] md:h-screen">
+          <Map fileData={fileData} shortestPath={shortestPath}/>
+        </div>
+        <div className="md:w-[30vw] overflow-y-scroll">
+          <SideBar fileData={fileData} setFileData={setFileData} setShortestPath={setShortestPath}/>
+        </div>
       </div>
     </>
   );
