@@ -51,21 +51,25 @@ function SideBar({
   };
 
   return (
-    <div className="flex flex-col text-center md:w-[30vw] bg-zinc-900 text-white">
-      <h1 className="bg-red-600 px-3 py-3 text-lg font-bold ">PATHFINDER</h1>
+    <div className="flex flex-col gap-4 text-center bg-zinc-900 text-white">
+      <h1 className="bg-red-600 p-3 text-lg font-bold sticky top-0 z-50 hidden md:block">
+        PATHFINDER
+      </h1>
 
-      <div className="flex flex-col items-center mt-5">
+      <div className="flex flex-col items-center mt-4 md:mt-0">
         <h2>1. Upload File Configuration</h2>
         <div className="w-[90%] mt-3">
           <input
             className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding py-[0.32rem] px-3 text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100"
             type="file"
-            onChange={(event) => inputFileHandler(event, setFileData, setShortestPath)}
+            onChange={(event) =>
+              inputFileHandler(event, setFileData, setShortestPath)
+            }
           />
         </div>
       </div>
 
-      <div className="flex flex-col items-center mt-5">
+      <div className="flex flex-col items-center">
         <h2>2. Choose Start Point, End Point, And Method</h2>
         <div className="w-[90%] mt-3">
           <label
@@ -134,7 +138,7 @@ function SideBar({
         </div>
       </div>
 
-      <div className="flex flex-col items-center mt-5">
+      <div className="flex flex-col items-center">
         <div className="w-[90%] mt-3">
           <button
             onClick={submitHandler}
@@ -145,7 +149,7 @@ function SideBar({
         </div>
       </div>
 
-      <div className="flex mt-5">
+      <div className="flex">
         <h2 className="text-left block font-bold ml-[5%] mb-2 text-lg text-gray-900 dark:text-white">
           Shortest Distance: {shortestDistance} km
         </h2>
