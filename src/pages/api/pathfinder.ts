@@ -28,6 +28,6 @@ export default async function handler(
       shortestDistance: result?.shortestDistance,
     });
   } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }

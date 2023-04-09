@@ -27,6 +27,9 @@ function UCS(start: any, end: any, num_nodes: any, nodes: any, adj_list: any) {
     }
   }
 
+  // Check if there is no path
+  if (distance[end] === Infinity) throw new Error("No path found!");
+
   let idx = end;
   while (idx != start) {
     shortestPath.push({

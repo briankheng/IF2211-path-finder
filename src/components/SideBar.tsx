@@ -1,6 +1,7 @@
 import inputFileHandler from "@/utils/inputFileHandler";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 function SideBar({
   fileData,
@@ -20,17 +21,21 @@ function SideBar({
       const end = document.getElementById("end") as HTMLSelectElement;
       const method = document.getElementById("method") as HTMLSelectElement;
 
-      // Check if the user has selected a start point, end point, and method
+      // Check if the user has selected a file, start point, end point, and method
+      if (!fileData) {
+        toast.error("Please select a file!");
+        return;
+      }
       if (start.value === "Choose a start point") {
-        alert("Please choose a start point");
+        toast.error("Please choose a start point!");
         return;
       }
       if (end.value === "Choose an end point") {
-        alert("Please choose an end point");
+        toast.error("Please choose an end point!");
         return;
       }
       if (method.value === "Choose a method") {
-        alert("Please choose a method");
+        toast.error("Please choose a method!");
         return;
       }
 
@@ -45,8 +50,9 @@ function SideBar({
 
       setShortestPath(shortestPath);
       setShortestDistance(shortestDistance);
-    } catch (e) {
-      console.log(e);
+      toast.success("Shortest path found!");
+    } catch (e: any) {
+      toast.error(e.response.data.message);
     }
   };
 
