@@ -53,7 +53,7 @@ function SideBar({
   };
 
   return (
-    <div className="flex flex-col gap-4 text-center bg-zinc-900 text-white">
+    <div className="flex flex-col gap-4 text-center bg-zinc-900 text-white h-full">
       <h1 className="bg-red-600 p-3 text-lg font-bold sticky top-0 z-50 hidden md:block">
         PATHFINDER
       </h1>
@@ -151,7 +151,7 @@ function SideBar({
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex flex-col flex-auto justify-end mb-5">
         <h2 className="text-left block font-bold ml-[5%] mb-2 text-lg text-gray-900 dark:text-white">
           Shortest Distance: {shortestDistance} km
         </h2>
