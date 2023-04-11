@@ -14,8 +14,7 @@ function AStar(start: any, end: any, num_nodes: any, nodes:any, adj_list: any) {
   }
 
   distance[start] = 0;
-  priorityQueue.push([start, 0+heuristic.get(start.id)!]);
-
+  priorityQueue.push([start, 0+heuristic.get(start)!]);
   while (priorityQueue.length > 0) {
     priorityQueue.sort((a, b) => a[1] - b[1]);
     const [now, _] = priorityQueue.shift()!;
@@ -28,7 +27,7 @@ function AStar(start: any, end: any, num_nodes: any, nodes:any, adj_list: any) {
       if (newDistance < distance[next]) {
         distance[next] = newDistance;
         parent[next] = now;
-        priorityQueue.push([next, newDistance+heuristic.get(next.id)!]);
+        priorityQueue.push([next, newDistance+heuristic.get(next)!]);
       }
     }
   }
