@@ -114,7 +114,7 @@ function Map({
       }
     }
 
-    if (point.id === id) {
+    if (point?.id === id) {
       setPoint(null);
     }
 
