@@ -12,25 +12,6 @@ export default function Home() {
   });
   const [shortestPath, setShortestPath] = useState(null);
 
-  console.log(fileData.num_nodes);
-  fileData.nodes.map((node: any) => console.log(node.name, node.lat, node.lng));
-  let adj_matrix : number[][]= [];
-  for(let i = 0; i < fileData.num_nodes; i++){
-    adj_matrix.push([]);
-    for(let j = 0; j < fileData.num_nodes; j++){
-      adj_matrix[i].push(0);
-    }
-  }
-  for (let i = 0; i < fileData.num_nodes; i++) {
-    for (let j = 0; j < fileData.num_nodes; j++) {
-      if(fileData.adj_list[i].includes(j)){
-        adj_matrix[i][j] = 1;
-      }
-    }
-  }
-  console.log(adj_matrix);
-  for (let i = 0; i < fileData.num_nodes; i++) console.log(adj_matrix[i]);
-  
   return (
     <>
       <div className="md:flex h-screen w-screen">
