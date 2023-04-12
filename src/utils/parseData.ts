@@ -19,9 +19,14 @@ function parseData(data: string): IData {
 
   for (let i = 1; i <= num_nodes; i++) {
     const line = lines[i].split(" ");
+    let names = "";
+    for (let j = 2; j < line.length; j++) {
+      names += line[j];
+      if (j != line.length - 1) names += " ";
+    }
     nodes.push({
       id: i - 1,
-      name: line[2],
+      name: names,
       lat: parseFloat(line[0]),
       lng: parseFloat(line[1]),
     });

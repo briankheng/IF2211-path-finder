@@ -5,16 +5,11 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import guid from "@/utils/guid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
-};
-
-const center = {
-  lat: -6.891213825491306,
-  lng: 107.61065741605813,
 };
 
 function Map({
@@ -32,18 +27,164 @@ function Map({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
   const [point, setPoint] = useState<any>(null);
+  const [center, setCenter] = useState<any>(null);
+
+  useEffect(() => {
+    if (fileData.num_nodes > 0) {
+      setCenter({
+        lat: fileData.nodes[0].lat,
+        lng: fileData.nodes[0].lng,
+      });
+    }
+
+    return () => {
+      setCenter({
+        lat: -6.891213825491306,
+        lng: 107.61065741605813,
+      });
+    };
+  }, [fileData.nodes[0]?.lat, fileData.nodes[0]?.lng]);
+
+  const handleRightClickMarker = (id: any) => {
+    const num_nodes = fileData.num_nodes - 1;
+    const nodes: {
+      id: number;
+      name: string;
+      lat: number;
+      lng: number;
+    }[] = [];
+    const adj_list: number[][] = [];
+    const paths: {
+      lat_start: number;
+      lng_start: number;
+      lat_end: number;
+      lng_end: number;
+    }[] = [];
+
+    for (let i = 0; i < fileData.num_nodes; i++) {
+      if (i === id) {
+        continue;
+      } else if (i > id) {
+        nodes.push({
+          id: i - 1,
+          name: `P ${i - 1}`,
+          lat: fileData.nodes[i].lat,
+          lng: fileData.nodes[i].lng,
+        });
+      } else {
+        nodes.push({
+          id: i,
+          name: `P ${i}`,
+          lat: fileData.nodes[i].lat,
+          lng: fileData.nodes[i].lng,
+        });
+      }
+    }
+
+    for (let i = 0; i < fileData.num_nodes; i++) {
+      const temp: number[] = [];
+      if (i === id) {
+        continue;
+      }
+      for (let j = 0; j < fileData.adj_list[i].length; j++) {
+        if (fileData.adj_list[i][j] === id) {
+          continue;
+        } else if (fileData.adj_list[i][j] > id) {
+          temp.push(fileData.adj_list[i][j] - 1);
+        } else {
+          temp.push(fileData.adj_list[i][j]);
+        }
+      }
+      adj_list.push(temp);
+    }
+
+    for (let i = 0; i < fileData.paths.length; i++) {
+      if (
+        (fileData.paths[i].lat_start === fileData.nodes[id].lat &&
+          fileData.paths[i].lng_start === fileData.nodes[id].lng) ||
+        (fileData.paths[i].lat_end === fileData.nodes[id].lat &&
+          fileData.paths[i].lng_end === fileData.nodes[id].lng)
+      ) {
+        continue;
+      } else {
+        paths.push(fileData.paths[i]);
+      }
+    }
+
+    setFileData({
+      num_nodes,
+      nodes,
+      adj_list,
+      paths,
+    });
+    setShortestPath(null);
+  };
+
+  const handleRightClickLine = (path: any) => {
+    const paths: {
+      lat_start: number;
+      lng_start: number;
+      lat_end: number;
+      lng_end: number;
+    }[] = [];
+
+    for (let i = 0; i < fileData.paths.length; i++) {
+      if (
+        fileData.paths[i].lat_start === path.lat_start &&
+        fileData.paths[i].lng_start === path.lng_start &&
+        fileData.paths[i].lat_end === path.lat_end &&
+        fileData.paths[i].lng_end === path.lng_end
+      ) {
+        continue;
+      } else {
+        paths.push(fileData.paths[i]);
+      }
+    }
+
+    let node_start = -1;
+    let node_end = -1;
+
+    for (let i = 0; i < fileData.num_nodes; i++) {
+      if (
+        fileData.nodes[i].lat === path.lat_start &&
+        fileData.nodes[i].lng === path.lng_start
+      ) {
+        node_start = i;
+      }
+      if (
+        fileData.nodes[i].lat === path.lat_end &&
+        fileData.nodes[i].lng === path.lng_end
+      ) {
+        node_end = i;
+      }
+    }
+
+    const adj_list: number[][] = [...fileData.adj_list];
+
+    for (let i = 0; i < adj_list[node_start].length; i++) {
+      if (adj_list[node_start][i] === node_end) {
+        adj_list[node_start].splice(i, 1);
+      }
+    }
+
+    for (let i = 0; i < adj_list[node_end].length; i++) {
+      if (adj_list[node_end][i] === node_start) {
+        adj_list[node_end].splice(i, 1);
+      }
+    }
+
+    setFileData({
+      ...fileData,
+      paths,
+      adj_list,
+    });
+    setShortestPath(null);
+  };
 
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={
-        fileData.num_nodes > 0
-          ? {
-              lat: fileData.nodes[fileData.num_nodes - 1].lat,
-              lng: fileData.nodes[fileData.num_nodes - 1].lng,
-            }
-          : center
-      }
+      center={center}
       zoom={15}
       onClick={(e) => {
         setFileData({
@@ -108,6 +249,9 @@ function Map({
                   }),
                   setPoint(null));
             }}
+            onRightClick={(e) => {
+              handleRightClickMarker(node.id);
+            }}
           />
         ))}
 
@@ -123,6 +267,9 @@ function Map({
               strokeColor: "black",
               strokeOpacity: 0.6,
               strokeWeight: 3,
+            }}
+            onRightClick={(e) => {
+              handleRightClickLine(path);
             }}
           />
         ))}
