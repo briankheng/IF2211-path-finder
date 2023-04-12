@@ -114,6 +114,10 @@ function Map({
       }
     }
 
+    if (point.id === id) {
+      setPoint(null);
+    }
+
     setFileData({
       num_nodes,
       nodes,
@@ -184,6 +188,27 @@ function Map({
     setShortestPath(null);
   };
 
+  function checkNotExistPath(
+    arg0: number | undefined,
+    arg1: number | undefined
+  ): boolean {
+    for (let i = 0; i < fileData.paths.length; i++) {
+      if (
+        (fileData.paths[i].lat_start === arg0 &&
+          fileData.paths[i].lng_start === arg1 &&
+          fileData.paths[i].lat_end === point.lat &&
+          fileData.paths[i].lng_end == point.lng) ||
+        (fileData.paths[i].lat_end === arg0 &&
+          fileData.paths[i].lng_end === arg1 &&
+          fileData.paths[i].lat_start === point.lat &&
+          fileData.paths[i].lng_start == point.lng)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -222,34 +247,35 @@ function Map({
                     lat: e.latLng?.lat(),
                     lng: e.latLng?.lng(),
                   })
-                : (setFileData({
-                    ...fileData,
-                    paths: [
-                      ...fileData.paths,
-                      {
-                        lat_start: point.lat,
-                        lng_start: point.lng,
-                        lat_end: e.latLng?.lat(),
-                        lng_end: e.latLng?.lng(),
-                      },
-                    ],
-                    adj_list:
-                      point.id < node.id
-                        ? [
-                            ...fileData.adj_list.slice(0, point.id),
-                            [...fileData.adj_list[point.id], node.id],
-                            ...fileData.adj_list.slice(point.id + 1, node.id),
-                            [...fileData.adj_list[node.id], point.id],
-                            ...fileData.adj_list.slice(node.id + 1),
-                          ]
-                        : [
-                            ...fileData.adj_list.slice(0, node.id),
-                            [...fileData.adj_list[node.id], point.id],
-                            ...fileData.adj_list.slice(node.id + 1, point.id),
-                            [...fileData.adj_list[point.id], node.id],
-                            ...fileData.adj_list.slice(point.id + 1),
-                          ],
-                  }),
+                : (checkNotExistPath(e.latLng?.lat(), e.latLng?.lng()) &&
+                    setFileData({
+                      ...fileData,
+                      paths: [
+                        ...fileData.paths,
+                        {
+                          lat_start: point.lat,
+                          lng_start: point.lng,
+                          lat_end: e.latLng?.lat(),
+                          lng_end: e.latLng?.lng(),
+                        },
+                      ],
+                      adj_list:
+                        point.id < node.id
+                          ? [
+                              ...fileData.adj_list.slice(0, point.id),
+                              [...fileData.adj_list[point.id], node.id],
+                              ...fileData.adj_list.slice(point.id + 1, node.id),
+                              [...fileData.adj_list[node.id], point.id],
+                              ...fileData.adj_list.slice(node.id + 1),
+                            ]
+                          : [
+                              ...fileData.adj_list.slice(0, node.id),
+                              [...fileData.adj_list[node.id], point.id],
+                              ...fileData.adj_list.slice(node.id + 1, point.id),
+                              [...fileData.adj_list[point.id], node.id],
+                              ...fileData.adj_list.slice(point.id + 1),
+                            ],
+                    }),
                   setPoint(null));
             }}
             onRightClick={(e) => {
