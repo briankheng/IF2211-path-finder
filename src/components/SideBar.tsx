@@ -36,8 +36,8 @@ function SideBar({
       }
 
       const response = await axios.post("api/pathfinder", {
-        start: start.value,
-        end: end.value,
+        start: parseInt(start.value),
+        end: parseInt(end.value),
         method: method.value,
         fileData,
       });
