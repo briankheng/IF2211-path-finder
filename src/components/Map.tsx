@@ -27,7 +27,10 @@ function Map({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
   const [point, setPoint] = useState<any>(null);
-  const [center, setCenter] = useState<any>(null);
+  const [center, setCenter] = useState<any>({
+    lat: -6.891213825491306,
+    lng: 107.61065741605813,
+  });
 
   useEffect(() => {
     if (fileData.num_nodes > 0) {
